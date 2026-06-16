@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CAMDEN - Sprint 4</title>
+    
+    <link rel="stylesheet" href="Design.css?v=1.4">
+    <link rel="stylesheet" href="Schedule.css?v=1.4">
+    
+    <script src="Design2.js?v=1.4" defer></script>
+    <script src="Schedule2.js?v=1.4" defer></script>
+</head>
+<body>
+
+<div class="sidebar" id="sidebar">
+    <a href="#" onclick="openScheduleModal(); closeSidebar();">Schedule</a>
+    <a href="https://p48marketing.com/team/">Team</a>
+    <a href="https://p48marketing.com/client-work/">Work</a>
+    <a href="https://p48marketing.com/blog/">Stories</a>
+</div>
+
+<div class="overlay" id="overlay" onclick="closeSidebar()"></div>
+
+<div class="topbar">
+    <button class="hamburger" onclick="toggleSidebar()">☰</button>
+    <a href="https://p48marketing.com">
+        <img src="P48_Logo.png" alt="P48 Logo" height="70"
+             onerror="this.style.display='none'; this.nextElementSibling.style.display='inline';">
+        <span style="display:none; font-weight:600; font-size:20px; color:#f64fd6;">P48</span>
+    </a>
+    <div class="social">
+        <button class="dropbtn"><span class="btn-icon">∨</span></button>
+        <div class="social-content">
+            <a href="https://www.instagram.com/p48marketing/">
+                <img src="Instagram_Icon.png" alt="" height="40" onerror="this.style.display='none'"> Instagram
+            </a>
+            <a href="https://www.linkedin.com/company/p48/">
+                <img src="LinkedIn_Icon.png" alt="" height="40" onerror="this.style.display='none'"> LinkedIn
+            </a>
+            <a href="https://www.twitter.com/p48marketing/">
+                <img src="X.png" alt="" height="40" onerror="this.style.display='none'"> Twitter
+            </a>
+        </div>
+    </div>
+</div>
+
+<hr>
+
+<section class="page" id="page1">
+
+    <div class="receipt-panel">
+        <div class="receipt-body">
+            <div class="receipt-row">
+                <span class="receipt-key">Station</span>
+                <span class="receipt-val" id="mainStationName">— Select station —</span>
+            </div>
+            <div class="receipt-row">
+                <span class="receipt-key">Category</span>
+                <span class="receipt-val" id="mainCategoryName">— Select category —</span>
+            </div>
+            <div class="receipt-row">
+                <span class="receipt-key">Campaign</span>
+                <span class="receipt-val" id="mainWeekRange">— Select dates —</span>
+            </div>
+            <div class="receipt-row">
+                <span class="receipt-key">Total Ads</span>
+                <span class="receipt-val" id="mainTotalAds">0</span>
+            </div>
+            <div class="receipt-divider receipt-divider--dashed"></div>
+            <div class="receipt-row">
+                <span class="receipt-key">Weekly Cost</span>
+                <span class="receipt-val" id="mainTotalCost">$0.00</span>
+            </div>
+            <div class="receipt-row">
+                <span class="receipt-key">Monthly Spend</span>
+                <span class="receipt-val" id="monthlySpend">—</span>
+            </div>
+            <div class="receipt-row receipt-row--highlight">
+                <span class="receipt-key">Campaign Total</span>
+                <span class="receipt-val" id="campaignCost">$0.00</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="split-hero">
+        <div class="split-panel split-left" id="splitLeft">
+            <div class="split-content">
+                <span class="split-label">Confirm</span>
+                <span class="split-label">Scheduling</span>
+            </div>
+            <button id="confirmButton" class="split-btn-invisible"></button>
+        </div>
+        <div class="split-panel split-right" id="splitRight" onclick="openScheduleModal()">
+            <div class="split-content">
+                <span class="split-label">Select</span>
+                <span class="split-label">Date</span>
+            </div>
+        </div>
+        <div class="split-divider"></div>
+    </div>
+
+</section>
+
+<div id="scheduleModal">
+    <div class="modal-box">
+        <button class="modal-close" onclick="closeScheduleModal()">✕ Close</button>
+        <div class="grid-top">
+            <input type="text" id="stationInput" class="station-input" placeholder="Station name...">
+            <select id="categorySelect" class="station-input" style="width:180px; cursor:pointer;">
+                <option value="">— Category —</option>
+                <option value="Radio">Radio</option>
+                <option value="TV">TV Broadcast</option>
+                <option value="Podcast">Podcast</option>
+                <option value="Social Media">Social Media</option>
+            </select>
+            <button class="grid-title-bar" id="startWeekBtn">Start Week</button>
+            <button class="grid-title-bar" id="endWeekBtn">End Week</button>
+            <input type="week" id="weekStart" style="display:none;">
+            <input type="week" id="weekEnd" style="display:none;">
+            <button class="grid-add-btn" onclick="addRow()">+ Add daypart</button>
+        </div>
+        <div class="grid-wrap">
+            <table id="daypartGrid">
+                <thead>
+                    <tr>
+                        <th class="lft">Daypart</th>
+                        <th>Ads/wk</th>
+                        <th>Length</th>
+                        <th>Mo</th><th>Tu</th><th>We</th><th>Th</th><th>Fr</th><th>Sa</th><th>Su</th>
+                        <th>Rate ($)</th>
+                        <th>Cost</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody id="gridBody"></tbody>
+            </table>
+        </div>
+        <div style="display:flex; gap:20px; margin-top:16px; font-weight:600; font-size:13px; padding:0 4px;">
+            <span>Total ads: <span id="totalAds">0</span></span>
+            <span>Total cost: <span id="totalCost">$0.00</span></span>
+        </div>
+    </div>
+</div>
+
+<div id="confirmModal" class="confirm-modal">
+    <div class="confirm-box">
+        <h3>✔ Confirmed</h3>
+        <div style="font-size:14px; text-align:left; margin-top:10px;">
+            <p><b>Station:</b> <span id="confirmStation"></span></p>
+            <p><b>Category:</b> <span id="confirmCategory"></span></p>
+            <p><b>Total Ads:</b> <span id="confirmAds"></span></p>
+            <p><b>Total Cost:</b> <span id="confirmCost"></span></p>
+            <p><b>Week Range:</b> <span id="confirmWeek"></span></p>
+        </div>
+        <div class="modal-btn-row">
+            <button onclick="closeConfirmModal()">OK</button>
+            <button id="downloadReceiptBtn">Download Receipt</button>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
