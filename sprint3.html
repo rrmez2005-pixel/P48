@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CAMDEN</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
+<style>
+/* ── BASE ── */
+h1 { color: rgb(26,26,174); font-size: 48px; }
+hr { border: 1.8px solid black; margin: 0; }
+body { font-family: 'Montserrat', Arial, sans-serif; font-weight: 400; line-height: 1.6; margin: 0; padding: 0; }
+
+/* ── TOPBAR ── */
+.topbar { display: flex; align-items: center; gap: 20px; padding: 10px; }
+.hamburger { font-size: 24px; background: none; border: none; cursor: pointer; padding: 6px 10px; }
+
+/* ── SOCIAL DROPDOWN ── */
+.social { position: relative; display: inline-block; }
+.social-content { display: none; position: absolute; top: 100%; width: fit-content; background-color: #f9f9f9; box-shadow: 0px 8px 16px rgba(0,0,0,0.2); z-index: 1; }
+.social-content a { display: flex; align-items: center; gap: 8px; padding: 6px 10px; text-decoration: none; color: black; white-space: nowrap; }
+.social-content a:hover { background-color: #43d1bf; color: white; transition: 0.3s; }
+.social:hover .social-content { display: block; }
+.social:hover .btn-icon { animation: spin 1s linear infinite; }
+.dropbtn { border: #f64fd6 solid 1.5px; border-radius: 8px; background: none; cursor: pointer; padding: 6px 10px; transition: background-color 0.3s, color 0.3s; }
+.dropbtn:hover { background-color: #f64fd6; color: white; }
+.btn-icon { display: inline-block; }
+@keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+
+/* ── SIDEBAR ── */
+.sidebar { height: 100%; width: 0; position: fixed; top: 0; left: 0; background-color: #f9f9f9; overflow-x: hidden; transition: width 0.3s; z-index: 100; padding-top: 60px; box-shadow: 2px 0 8px rgba(0,0,0,0.2); }
+.sidebar a { display: block; padding: 12px 20px; text-decoration: none; color: black; white-space: nowrap; transition: 0.3s; }
+.sidebar a:hover { background-color: #f64fd6; color: white; }
+.overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.4); z-index: 99; }
+
+/* ── PAGE1 LAYOUT ── */
+.page { display: flex; font-size: 2rem; }
+#page1 {
+    flex-direction: column;
+    min-height: calc(100vh - 92px);
+    padding: 0;
+    background: #ffffff;
+    justify-content: flex-start;
+    align-items: stretch;
+    font-size: 1rem;
+}
+
+/* ── RECEIPT PANEL (top 50%) ── */
+.receipt-panel {
+    flex: 0 0 50%;
+    background: #ffffff;
+    border-bottom: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 18px 40px 12px;
+    font-family: 'Montserrat', Arial, sans-serif;
+}
+.receipt-divider { width: 100%; max-width: 500px; height: 1px; background: #e8e8e8; margin: 6px 0; }
+.receipt-divider--dashed { background: none; border-top: 1.5px dashed #d0d0d0; }
+.receipt-body { width: 100%; max-width: 500px; display: flex; flex-direction: column; gap: 4px; }
+.receipt-row { display: flex; justify-content: space-between; align-items: baseline; padding: 2px 0; }
+.receipt-key { color: #999; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; font-size: 11px; }
+.receipt-val { color: #111; font-weight: 600; font-size: 13px; text-align: right; }
+.receipt-row--highlight .receipt-key { color: #2e77f9; }
+.receipt-row--highlight .receipt-val { color: #f64fd6; font-size: 15px; }
+
+/* ── SPLIT HERO (bottom 35%) ── */
+.split-hero { flex: 0 0 50%; position: relative; display: flex; overflow: hidden; }
+
+/* Each panel fills exactly half — no clipping so hover fills seamlessly */
+.split-panel { position: relative; width: 50%; height: 100%; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: background 0.3s ease; overflow: visible; }
+.split-left  { background: #ffffff; z-index: 1; }
+.split-right { background: #ffffff; z-index: 1; }
+.split-left:hover  { background: #111111; }
+.split-right:hover { background: #111111; }
+
+/* Labels */
+.split-content { display: flex; flex-direction: column; align-items: center; gap: 2px; pointer-events: none; user-select: none; position: relative; z-index: 2; }
+.split-left  .split-content { transform: translateX(-20px); }
+.split-right .split-content { transform: translateX(20px); }
+.split-label { font-family: 'Montserrat', Arial, sans-serif; font-size: clamp(2rem, 4.5vw, 4rem); font-weight: 600; letter-spacing: -0.02em; color: #111111; line-height: 1.05; transition: color 0.3s ease; text-transform: uppercase; }
+.split-left:hover  .split-label,
+.split-right:hover .split-label { color: #ffffff; }
+
+/* Diagonal divider: a tall skewed block sitting exactly at the 50% seam */
+.split-divider {
+    position: absolute;
+    top: -10%;
+    left: calc(50% - 30px);
+    width: 60px;
+    height: 120%;
+    background: linear-gradient(to bottom, #f64fd6, #2e77f9);
+    transform: skewX(-6deg);
+    z-index: 5;
+    pointer-events: none;
+    box-shadow: 0 0 18px rgba(246,79,214,0.6);
+}
+
+.split-btn-invisible { position: absolute; inset: 0; width: 100%; height: 100%; background: transparent; border: none; cursor: pointer; z-index: 3; }
+.split-left.confirmed-state              { background: #f64fd6 !important; }
+.split-left.confirmed-state .split-label { color: #fff !important; }
+
+/* ── CONFIRM MODAL ── */
+.confirm-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 999; justify-content: center; align-items: center; }
+.confirm-box { background: white; padding: 25px 35px; border-radius: 10px; text-align: center; font-family: 'Montserrat', Arial, sans-serif; font-size: 18px; font-weight: 600; }
+.confirm-box button { margin-top: 15px; padding: 8px 16px; border: none; border-radius: 6px; background: #2e77f9; color: white; cursor: pointer; }
+.confirm-box button:hover { background: #1d5fd1; }
+
+/* ── SCHEDULE MODAL ── */
+#scheduleModal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 200; overflow-y: auto; }
+.modal-box { background: white; margin: 3% auto; padding: 30px; width: 92%; max-width: 1000px; border-radius: 10px; position: relative; }
+.modal-close { position: absolute; top: 10px; right: 10px; background: #f64fd6; color: white; border: none; border-radius: 8px; padding: 6px 12px; cursor: pointer; font-family: 'Montserrat', Arial, sans-serif; font-size: 13px; }
+.modal-close:hover { background: #d43ab8; }
+.grid-top { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 12px; }
+.station-input { font-size: 13px; font-weight: 600; padding: 6px 10px; border: 2px solid #00cc00; border-radius: 6px; background: #e6ffe6; color: #000; width: 200px; font-family: 'Montserrat', Arial, sans-serif; }
+.grid-title-bar { background: #2e77f9; color: white; font-size: 12px; font-weight: 600; padding: 6px 14px; border-radius: 6px; white-space: nowrap; font-family: 'Montserrat', Arial, sans-serif; border: none; cursor: pointer; transition: 0.3s; }
+.grid-title-bar:hover { background: #012666; }
+.grid-add-btn { font-size: 12px; padding: 6px 14px; cursor: pointer; border-radius: 6px; border: 1px solid #003366; background: white; color: #f64fd6; font-family: 'Montserrat', Arial, sans-serif; font-weight: 600; }
+.grid-add-btn:hover { background: #f64fd6; color: white; }
+.grid-wrap { overflow-x: auto; }
+#daypartGrid { border-collapse: collapse; min-width: 100%; font-size: 12px; font-family: 'Montserrat', Arial, sans-serif; table-layout: fixed; }
+#daypartGrid th { background: #f64fd6; color: white; padding: 7px 4px; text-align: center; font-weight: 600; font-size: 11px; border: 1px solid #000; white-space: nowrap; }
+#daypartGrid th.lft { text-align: left; padding-left: 8px; width: 150px; }
+#daypartGrid td { border: 1px solid #ccc; padding: 0; background: white; vertical-align: middle; }
+#daypartGrid tr:nth-child(even) td { background: #f5f9ff; }
+#daypartGrid tr:hover td { background: #eef4ff; }
+#daypartGrid td.dp-name input, #daypartGrid td.num-cell input, #daypartGrid td.rate-cell input { width: 100%; border: none; background: transparent; font-size: 12px; color: #000; padding: 6px 4px; font-family: 'Montserrat', Arial, sans-serif; text-align: center; }
+#daypartGrid td.dp-name input { text-align: left; padding-left: 8px; font-weight: 600; }
+#daypartGrid td.dp-name input:focus, #daypartGrid td.num-cell input:focus, #daypartGrid td.rate-cell input:focus, #daypartGrid td.sel-cell select:focus { background: #dceaff; outline: none; }
+#daypartGrid td.sel-cell select { width: 100%; border: none; background: transparent; font-size: 12px; color: #000; padding: 6px 2px; cursor: pointer; font-family: 'Montserrat', Arial, sans-serif; text-align: center; }
+#daypartGrid td.cost-cell input { width: 100%; border: none; background: transparent; font-size: 12px; color: #cc0000; font-weight: 600; padding: 6px 4px; text-align: center; font-family: 'Montserrat', Arial, sans-serif; }
+#daypartGrid td.cost-cell input:focus { background: #dceaff; outline: none; }
+#daypartGrid td.del-cell { text-align: center; padding: 3px; width: 36px; }
+.del-row-btn { font-size: 12px; padding: 3px 8px; cursor: pointer; border-radius: 5px; border: 1px solid #ccc; background: white; color: #cc0000; font-family: 'Montserrat', Arial, sans-serif; }
+.del-row-btn:hover { background: #cc0000; color: white; }
+#daypartGrid td.ads-week { padding: 0 !important; }
+</style>
+</head>
+<body>
+
+<div class="sidebar" id="sidebar">
+    <a href="#" onclick="openScheduleModal(); closeSidebar();">Schedule</a>
+    <a href="https://p48marketing.com/team/">Team</a>
+    <a href="https://p48marketing.com/client-work/">Work</a>
+    <a href="https://p48marketing.com/blog/">Stories</a>
+</div>
+
+<div class="overlay" id="overlay" onclick="closeSidebar()"></div>
+
+<div class="topbar">
+    <button class="hamburger" onclick="toggleSidebar()">☰</button>
+    <a href="https://p48marketing.com">
+        <img src="P48_Logo.png" alt="P48 Logo" height="70"
+             onerror="this.style.display='none'; this.nextElementSibling.style.display='inline';">
+        <span style="display:none; font-weight:600; font-size:20px; color:#f64fd6;">P48</span>
+    </a>
+    <div class="social">
+        <button class="dropbtn"><span class="btn-icon">∨</span></button>
+        <div class="social-content">
+            <a href="https://www.instagram.com/p48marketing/">
+                <img src="Instagram_Icon.png" alt="" height="40" onerror="this.style.display='none'"> Instagram
+            </a>
+            <a href="https://www.linkedin.com/company/p48/">
+                <img src="LinkedIn_Icon.png" alt="" height="40" onerror="this.style.display='none'"> LinkedIn
+            </a>
+            <a href="https://www.twitter.com/p48marketing/">
+                <img src="X.png" alt="" height="40" onerror="this.style.display='none'"> Twitter
+            </a>
+        </div>
+    </div>
+</div>
+
+<hr>
+
+<section class="page" id="page1">
+
+    <!-- TOP 65%: RECEIPT -->
+    <div class="receipt-panel">
+        <div class="receipt-body">
+            <div class="receipt-row">
+                <span class="receipt-key">Station</span>
+                <span class="receipt-val" id="mainStationName">— Select station —</span>
+            </div>
+            <div class="receipt-row">
+                <span class="receipt-key">Category</span>
+                <span class="receipt-val" id="mainCategoryName">— Select category —</span>
+            </div>
+            <div class="receipt-row">
+                <span class="receipt-key">Campaign</span>
+                <span class="receipt-val" id="mainWeekRange">— Select dates —</span>
+            </div>
+            <div class="receipt-row">
+                <span class="receipt-key">Total Ads</span>
+                <span class="receipt-val" id="mainTotalAds">0</span>
+            </div>
+            <div class="receipt-divider receipt-divider--dashed"></div>
+            <div class="receipt-row">
+                <span class="receipt-key">Weekly Cost</span>
+                <span class="receipt-val" id="mainTotalCost">$0.00</span>
+            </div>
+            <div class="receipt-row receipt-row--highlight">
+                <span class="receipt-key">Campaign Total</span>
+                <span class="receipt-val" id="campaignCost">$0.00</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- BOTTOM 35%: SPLIT BUTTONS -->
+    <div class="split-hero">
+        <div class="split-panel split-left" id="splitLeft">
+            <div class="split-content">
+                <span class="split-label">Confirm</span>
+                <span class="split-label">Scheduling</span>
+            </div>
+            <button id="confirmButton" class="split-btn-invisible"></button>
+        </div>
+        <div class="split-panel split-right" id="splitRight" onclick="openScheduleModal()">
+            <div class="split-content">
+                <span class="split-label">Select</span>
+                <span class="split-label">Date</span>
+            </div>
+        </div>
+        <div class="split-divider"></div>
+    </div>
+
+</section>
+
+<!-- SCHEDULE MODAL -->
+<div id="scheduleModal">
+    <div class="modal-box">
+        <button class="modal-close" onclick="closeScheduleModal()">✕ Close</button>
+        <div class="grid-top">
+            <input type="text" id="stationInput" class="station-input" placeholder="Station name...">
+            <select id="categorySelect" class="station-input" style="width:180px; cursor:pointer;">
+                <option value="">— Category —</option>
+                <option value="Radio">Radio</option>
+                <option value="TV">TV Broadcast</option>
+                <option value="Podcast">Podcast</option>
+                <option value="Social Media">Social Media</option>
+            </select>
+            <button class="grid-title-bar" id="startWeekBtn">Start Week</button>
+            <button class="grid-title-bar" id="endWeekBtn">End Week</button>
+            <input type="week" id="weekStart" style="display:none;">
+            <input type="week" id="weekEnd" style="display:none;">
+            <button class="grid-add-btn" onclick="addRow()">+ Add daypart</button>
+        </div>
+        <div class="grid-wrap">
+            <table id="daypartGrid">
+                <thead>
+                    <tr>
+                        <th class="lft">Daypart</th>
+                        <th>Ads/wk</th>
+                        <th>Length</th>
+                        <th>Mo</th><th>Tu</th><th>We</th><th>Th</th><th>Fr</th><th>Sa</th><th>Su</th>
+                        <th>Rate ($)</th>
+                        <th>Cost</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody id="gridBody"></tbody>
+            </table>
+        </div>
+        <div style="display:flex; gap:20px; margin-top:16px; font-weight:600; font-size:13px; padding:0 4px;">
+            <span>Total ads: <span id="totalAds">0</span></span>
+            <span>Total cost: <span id="totalCost">$0.00</span></span>
+        </div>
+    </div>
+</div>
+
+<!-- CONFIRM MODAL -->
+<div id="confirmModal" class="confirm-modal">
+    <div class="confirm-box">
+        <h3>✔ Confirmed</h3>
+        <div style="font-size:14px; text-align:left; margin-top:10px;">
+            <p><b>Station:</b> <span id="confirmStation"></span></p>
+            <p><b>Category:</b> <span id="confirmCategory"></span></p>
+            <p><b>Total Ads:</b> <span id="confirmAds"></span></p>
+            <p><b>Total Cost:</b> <span id="confirmCost"></span></p>
+            <p><b>Week Range:</b> <span id="confirmWeek"></span></p>
+        </div>
+        <button onclick="closeConfirmModal()">OK</button>
+    </div>
+</div>
+
+<script>
+/* ── SIDEBAR ── */
+function toggleSidebar() {
+    document.getElementById('sidebar').style.width = '200px';
+    document.getElementById('overlay').style.display = 'block';
+}
+function closeSidebar() {
+    document.getElementById('sidebar').style.width = '0';
+    document.getElementById('overlay').style.display = 'none';
+}
+
+/* ── SOCIAL ICON SWAP ── */
+var social = document.querySelector('.social');
+var icon   = document.querySelector('.btn-icon');
+social.addEventListener('mouseenter', function() { icon.textContent = '↺'; });
+social.addEventListener('mouseleave', function() { icon.textContent = '∨'; });
+
+/* ── SCHEDULE GRID DATA ── */
+var LENGTHS = [':15', ':30', ':45', ':60'];
+var DAYS    = ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'];
+
+var rows = [
+    { name: 'Mornings (7a-10a)',     len: ':60', Mo:0, Tu:0, We:0, Th:0, Fr:0, Sa:0, Su:0 },
+    { name: 'Middays (10a-3p)',      len: ':60', Mo:0, Tu:0, We:0, Th:0, Fr:0, Sa:0, Su:0 },
+    { name: 'Afternoons (3p-6:30p)', len: ':60', Mo:0, Tu:0, We:0, Th:0, Fr:0, Sa:0, Su:0 },
+    { name: 'Sa-Su 9a-3p',          len: ':60', Mo:0, Tu:0, We:0, Th:0, Fr:0, Sa:0, Su:0 },
+    { name: 'M-Su 6a-12M Bonus',    len: ':60', Mo:0, Tu:0, We:0, Th:0, Fr:0, Sa:0, Su:0 }
+];
+
+function lenOptions(cur) {
+    return LENGTHS.map(function(l) {
+        return '<option value="' + l + '"' + (cur === l ? ' selected' : '') + '>' + l + '</option>';
+    }).join('');
+}
+
+function renderGrid() {
+    var body = document.getElementById('gridBody');
+    if (!body) return;
+    body.innerHTML = '';
+    rows.forEach(function(row, i) {
+        var tr = document.createElement('tr');
+        var dayCells = DAYS.map(function(d) {
+            return '<td class="num-cell"><input type="number" min="0" max="99" value="' + (row[d] || 0) + '"></td>';
+        }).join('');
+        tr.innerHTML =
+            '<td class="dp-name"><input type="text" value="' + row.name + '" placeholder="Daypart name"></td>' +
+            '<td class="num-cell ads-week">0</td>' +
+            '<td class="sel-cell"><select>' + lenOptions(row.len) + '</select></td>' +
+            dayCells +
+            '<td class="rate-cell"><input type="text" placeholder="0.00"></td>' +
+            '<td class="cost-cell" style="color:#cc0000;font-weight:600;text-align:center;"></td>' +
+            '<td class="del-cell"><button class="del-row-btn" onclick="deleteRow(' + i + ')">✕</button></td>';
+        body.appendChild(tr);
+    });
+    getAllTotals();
+}
+
+function getSelectedWeeks() {
+    var weekStart = document.getElementById('weekStart');
+    var weekEnd   = document.getElementById('weekEnd');
+    if (!weekStart || !weekEnd || !weekStart.value || !weekEnd.value) return 1;
+    var sp = weekStart.value.split('-W').map(Number);
+    var ep = weekEnd.value.split('-W').map(Number);
+    if (sp[0] === ep[0]) return Math.max(1, (ep[1] - sp[1]) + 1);
+    return 1;
+}
+
+function calculateRow(tr) {
+    var cells = tr.children;
+    var adsPerWeek = 0;
+    for (var i = 3; i <= 9; i++) {
+        var inp = cells[i].querySelector('input');
+        adsPerWeek += parseInt(inp ? inp.value : 0) || 0;
+    }
+    var rateInput = cells[10].querySelector('input');
+    var rate = parseFloat(rateInput ? rateInput.value : 0) || 0;
+    var weeklyCost = adsPerWeek * rate;
+    var campaignCost = weeklyCost * getSelectedWeeks();
+    cells[1].textContent  = adsPerWeek;
+    cells[11].textContent = campaignCost > 0 ? '$' + campaignCost.toFixed(2) : '';
+    return [adsPerWeek, weeklyCost, campaignCost];
+}
+
+function getAllTotals() {
+    var body = document.getElementById('gridBody');
+    if (!body) return;
+    var totalAds = 0, totalWeekly = 0, totalCampaign = 0;
+    body.querySelectorAll('tr').forEach(function(tr) {
+        var r = calculateRow(tr);
+        totalAds      += r[0];
+        totalWeekly   += r[1];
+        totalCampaign += r[2];
+    });
+    var el;
+    el = document.getElementById('totalAds');      if (el) el.innerText = totalAds;
+    el = document.getElementById('totalCost');     if (el) el.innerText = '$' + totalCampaign.toFixed(2);
+    el = document.getElementById('mainTotalAds');  if (el) el.innerText = totalAds;
+    el = document.getElementById('mainTotalCost'); if (el) el.innerText = '$' + totalWeekly.toFixed(2);
+    el = document.getElementById('campaignCost');  if (el) el.innerText = '$' + totalCampaign.toFixed(2);
+}
+
+document.addEventListener('input', function(e) {
+    var body = document.getElementById('gridBody');
+    if (body && body.contains(e.target)) getAllTotals();
+});
+
+function addRow() {
+    rows.push({ name: 'New daypart', len: ':60', Mo:0, Tu:0, We:0, Th:0, Fr:0, Sa:0, Su:0 });
+    renderGrid();
+}
+function deleteRow(i) { rows.splice(i, 1); renderGrid(); }
+
+/* ── MODAL OPEN/CLOSE ── */
+function openScheduleModal() {
+    document.getElementById('scheduleModal').style.display = 'block';
+    renderGrid();
+    var si = document.getElementById('stationInput');
+    var mn = document.getElementById('mainStationName');
+    if (si && mn) mn.innerText = si.value.trim() || '— Select station —';
+}
+function closeScheduleModal() {
+    document.getElementById('scheduleModal').style.display = 'none';
+}
+document.getElementById('scheduleModal').addEventListener('click', function(e) {
+    if (e.target === this) closeScheduleModal();
+});
+
+/* ── WEEK PICKER — Monday-first ── */
+function getMondayOfWeek(value) {
+    var parts = value.split('-W').map(Number);
+    var year = parts[0], week = parts[1];
+    var jan4 = new Date(year, 0, 4);
+    var dow  = jan4.getDay() || 7;
+    var mon  = new Date(jan4);
+    mon.setDate(jan4.getDate() - (dow - 1) + (week - 1) * 7);
+    return mon;
+}
+function fmtDate(d) {
+    return d.toLocaleString('default', { month: 'short' }) + ' ' + d.getDate();
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    var startBtn  = document.getElementById('startWeekBtn');
+    var endBtn    = document.getElementById('endWeekBtn');
+    var weekStart = document.getElementById('weekStart');
+    var weekEnd   = document.getElementById('weekEnd');
+
+    startBtn.addEventListener('click', function() {
+        if (weekStart.showPicker) weekStart.showPicker(); else weekStart.click();
+    });
+    endBtn.addEventListener('click', function() {
+        if (weekEnd.showPicker) weekEnd.showPicker(); else weekEnd.click();
+    });
+
+    weekStart.addEventListener('change', function() {
+        if (!this.value) return;
+        startBtn.textContent = fmtDate(getMondayOfWeek(this.value)) + ' - Week 2026';
+        getAllTotals();
+        syncWeekRange();
+    });
+    weekEnd.addEventListener('change', function() {
+        if (!this.value) return;
+        endBtn.textContent = fmtDate(getMondayOfWeek(this.value)) + ' - Week 2026';
+        getAllTotals();
+        syncWeekRange();
+    });
+});
+
+function syncWeekRange() {
+    var s  = document.getElementById('startWeekBtn').innerText.trim();
+    var e  = document.getElementById('endWeekBtn').innerText.trim();
+    var el = document.getElementById('mainWeekRange');
+    if (!el) return;
+    var hasS = s !== 'Start Week', hasE = e !== 'End Week';
+    el.innerText = (hasS || hasE) ? s + '  →  ' + e : '— Select dates —';
+}
+
+/* ── STATION SYNC ── */
+document.addEventListener('input', function(e) {
+    if (e.target && e.target.id === 'stationInput') {
+        var mn = document.getElementById('mainStationName');
+        if (mn) mn.innerText = e.target.value.trim() || '— Select station —';
+    }
+});
+
+/* ── CATEGORY SYNC ── */
+document.getElementById('categorySelect').addEventListener('change', function() {
+    var el = document.getElementById('mainCategoryName');
+    if (el) el.innerText = this.value || '— Select category —';
+});
+
+/* ── CONFIRM BUTTON ── */
+document.addEventListener('DOMContentLoaded', function() {
+    var confirmBtn = document.getElementById('confirmButton');
+    var modal      = document.getElementById('confirmModal');
+    var splitLeft  = document.getElementById('splitLeft');
+
+    confirmBtn.addEventListener('click', function() {
+        if (typeof getAllTotals === 'function') getAllTotals();
+
+        var station  = document.getElementById('mainStationName')?.innerText  || 'Not selected';
+        var category = document.getElementById('mainCategoryName')?.innerText || 'Not selected';
+        var ads      = document.getElementById('mainTotalAds')?.innerText     || '0';
+        var cost     = document.getElementById('campaignCost')?.innerText     || '$0.00';
+        var start    = document.getElementById('startWeekBtn')?.innerText     || 'Start Week';
+        var end      = document.getElementById('endWeekBtn')?.innerText       || 'End Week';
+
+        document.getElementById('confirmStation').innerText  = station;
+        document.getElementById('confirmCategory').innerText = category;
+        document.getElementById('confirmAds').innerText      = ads;
+        document.getElementById('confirmCost').innerText     = cost;
+        document.getElementById('confirmWeek').innerText     = start + ' > ' + end;
+
+        modal.style.display = 'flex';
+
+        splitLeft.classList.add('confirmed-state');
+        var labels = splitLeft.querySelectorAll('.split-label');
+        if (labels.length >= 2) { labels[0].textContent = '✔'; labels[1].textContent = 'Confirmed'; }
+        confirmBtn.style.pointerEvents = 'none';
+    });
+
+    window.closeConfirmModal = function() { modal.style.display = 'none'; };
+    modal.addEventListener('click', function(e) { if (e.target === modal) modal.style.display = 'none'; });
+});
+</script>
+</body>
+</html>

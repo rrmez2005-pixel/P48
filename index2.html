@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>My Schedule</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <h1>Weekly Schedule</h1>
+
+    <div class="form-box">
+        <input type="text" id="dayInput" placeholder="Day">
+        <input type="text" id="timeInput" placeholder="Time">
+        <input type="text" id="activityInput" placeholder="Activity">
+        <input type="text" id="locationInput" placeholder="Location">
+        <button onclick="addSchedule()">Add</button>
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Day</th>
+                <th>Time</th>
+                <th>Activity</th>
+                <th>Location</th>
+                <th>Remove</th>
+            </tr>
+        </thead>
+
+        <tbody id="scheduleBody">
+            <tr>
+                <td>Monday</td>
+                <td>9:00 AM - 10:30 AM</td>
+                <td>Java Class</td>
+                <td>Room 204</td>
+                <td><button onclick="removeRow(this)">Delete</button></td>
+            </tr>
+
+            <tr>
+                <td>Wednesday</td>
+                <td>3:00 PM - 4:30 PM</td>
+                <td>Team Meeting</td>
+                <td>Online</td>
+                <td><button onclick="removeRow(this)">Delete</button></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <script src="script.js"></script>
+</body>
+</html>
