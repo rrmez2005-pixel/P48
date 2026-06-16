@@ -1,0 +1,211 @@
+#scheduleModal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.5);
+    z-index: 200;
+    overflow-y: auto;
+}
+
+.modal-box {
+    margin: 3% auto;
+    padding: 40px 30px 30px;
+    width: 92%;
+    max-width: 1000px;
+    border-radius: 12px;
+    position: relative;
+    
+    border: 3px solid transparent;
+    background-image: linear-gradient(#fff, #fff), linear-gradient(to bottom right, #f64fd6, #2e77f9);
+    background-origin: border-box;
+    background-clip: padding-box, border-box;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+}
+
+.modal-close {
+    position: absolute;
+    top: 18px;
+    right: 20px;
+    background: #f64fd6;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    padding: 6px 14px;
+    cursor: pointer;
+    font-family: 'Montserrat', Arial, sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    z-index: 10;
+    transition: background 0.2s;
+}
+
+.modal-close:hover {
+    background: #d43ab8;
+}
+
+.grid-top {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-bottom: 12px;
+    padding-right: 90px; 
+}
+
+.station-input {
+    font-size: 13px;
+    font-weight: 600;
+    padding: 6px 10px;
+    border: 2px solid #e8e8e8;
+    border-radius: 6px;
+    font-family: 'Montserrat', Arial, sans-serif;
+    box-sizing: border-box;
+}
+
+.station-input:focus {
+    border-color: #2e77f9;
+    outline: none;
+}
+
+.grid-title-bar {
+    background: #2e77f9;
+    color: white;
+    font-size: 13px;
+    font-weight: 600;
+    padding: 8px 14px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-family: 'Montserrat', Arial, sans-serif;
+}
+
+.grid-add-btn {
+    background: #43d1bf;
+    color: white;
+    font-size: 13px;
+    font-weight: 600;
+    padding: 8px 14px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    margin-left: auto;
+    font-family: 'Montserrat', Arial, sans-serif;
+}
+
+.grid-wrap {
+    overflow-x: auto;
+    border: 1.5px solid black;
+    border-radius: 6px;
+    background: #ffffff;
+}
+
+#daypartGrid {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: 'Montserrat', Arial, sans-serif;
+}
+
+#daypartGrid th {
+    background: #111111;
+    color: white;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    padding: 10px 4px;
+    border-bottom: 1.5px solid black;
+}
+
+#daypartGrid th.lft {
+    text-align: left;
+    padding-left: 12px;
+}
+
+#daypartGrid td {
+    padding: 0;
+    border-bottom: 1px solid #e8e8e8;
+    border-right: 1px solid #e8e8e8;
+    height: 38px;
+    box-sizing: border-box;
+}
+
+#daypartGrid td:last-child {
+    border-right: none;
+}
+
+#daypartGrid th:nth-child(2),
+#daypartGrid td:nth-child(2),
+#daypartGrid td:nth-child(2) input {
+    text-align: center !important;
+}
+
+#daypartGrid input[type="text"],
+#daypartGrid input[type="number"],
+#daypartGrid select {
+    width: 100%;
+    height: 100%;
+    border: none;
+    background: transparent;
+    font-family: 'Montserrat', Arial, sans-serif;
+    font-size: 12px;
+    color: #000;
+    box-sizing: border-box !important;
+    padding: 6px;
+    margin: 0;
+    display: block;
+}
+
+#daypartGrid td.dp-name input {
+    text-align: left;
+    padding-left: 12px;
+    font-weight: 600;
+}
+
+#daypartGrid td.dp-name input:focus,
+#daypartGrid td.num-cell input:focus,
+#daypartGrid td.rate-cell input:focus,
+#daypartGrid td.sel-cell select:focus {
+    background: #dceaff;
+    outline: none !important;
+    border: none !important;
+}
+
+#daypartGrid td.sel-cell select {
+    cursor: pointer;
+    text-align: center;
+}
+
+#daypartGrid td.cost-cell input {
+    color: #cc0000;
+    font-weight: 600;
+    text-align: center;
+}
+
+#daypartGrid td.cost-cell input:focus {
+    background: #dceaff;
+    outline: none !important;
+    border: none !important;
+}
+
+#daypartGrid td.del-cell {
+    text-align: center;
+    padding: 3px;
+    width: 36px;
+}
+
+.del-row-btn {
+    background: none;
+    border: none;
+    color: #ff3b30;
+    font-size: 16px;
+    cursor: pointer;
+    font-weight: 600;
+    padding: 2px 6px;
+}
+
+.del-row-btn:hover {
+    color: #cc0000;
+}

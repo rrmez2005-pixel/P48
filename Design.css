@@ -1,0 +1,315 @@
+h1 { 
+    color: rgb(26,26,174); 
+    font-size: 48px; 
+}
+hr { 
+    border: 1.8px solid black; 
+    margin: 0; 
+}
+body { 
+    font-family: 'Montserrat', Arial, sans-serif; 
+    font-weight: 400; 
+    line-height: 1.6; 
+    margin: 0; 
+    padding: 0; 
+}
+
+.topbar { 
+    display: flex; 
+    align-items: center; 
+    gap: 20px; 
+    padding: 10px; 
+}
+.hamburger { 
+    font-size: 24px; 
+    background: none; 
+    border: none; 
+    cursor: pointer; 
+    padding: 6px 10px; 
+}
+
+.social { 
+    position: relative; 
+    display: inline-block; 
+}
+.social-content { 
+    display: none; 
+    position: absolute; 
+    top: 100%; 
+    width: fit-content; 
+    background-color: #f9f9f9; 
+    box-shadow: 0px 8px 16px rgba(0,0,0,0.2); 
+    z-index: 1; 
+}
+.social-content a { 
+    display: flex; 
+    align-items: center; 
+    gap: 8px; 
+    padding: 6px 10px; 
+    text-decoration: none; 
+    color: black; 
+    white-space: nowrap; 
+}
+.social-content a:hover { 
+    background-color: #43d1bf; 
+    color: white; 
+    transition: 0.3s; 
+}
+.social:hover .social-content { 
+    display: block; 
+}
+.social:hover .btn-icon { 
+    animation: spin 1s linear infinite; 
+}
+.dropbtn { 
+    border: #f64fd6 solid 1.5px; 
+    border-radius: 8px; 
+    background: none; 
+    cursor: pointer; 
+    padding: 6px 10px; 
+    transition: background-color 0.3s, color 0.3s; 
+}
+.dropbtn:hover { 
+    background-color: #f64fd6; 
+    color: white; 
+}
+.btn-icon { 
+    display: inline-block; 
+}
+@keyframes spin { 
+    from { transform: rotate(0deg); } 
+    to { transform: rotate(360deg); } 
+}
+
+.sidebar { 
+    height: 100%; 
+    width: 0; 
+    position: fixed; 
+    top: 0; 
+    left: 0; 
+    background-color: #f9f9f9; 
+    overflow-x: hidden; 
+    transition: width 0.3s; 
+    z-index: 100; 
+    padding-top: 60px; 
+    box-shadow: 2px 0 8px rgba(0,0,0,0.2); 
+}
+.sidebar a { 
+    display: block; 
+    padding: 12px 20px; 
+    text-decoration: none; 
+    color: black; 
+    white-space: nowrap; 
+    transition: 0.3s; 
+}
+.sidebar a:hover { 
+    background-color: #f64fd6; 
+    color: white; 
+}
+.overlay { 
+    display: none; 
+    position: fixed; 
+    top: 0; 
+    left: 0; 
+    width: 100%; 
+    height: 100%; 
+    background: rgba(0,0,0,0.4); 
+    z-index: 99; 
+}
+
+.page { 
+    display: flex; 
+    font-size: 2rem; 
+}
+#page1 {
+    flex-direction: column;
+    min-height: calc(100vh - 92px);
+    padding: 0;
+    background: #ffffff;
+    justify-content: flex-start;
+    align-items: stretch;
+    font-size: 1rem;
+}
+
+.receipt-panel {
+    flex: 0 0 50%;
+    background: #ffffff;
+    border-bottom: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 18px 40px 12px;
+    font-family: 'Montserrat', Arial, sans-serif;
+}
+.receipt-divider { 
+    width: 100%; 
+    max-width: 500px; 
+    height: 1px; 
+    background: #e8e8e8; 
+    margin: 6px 0; 
+}
+.receipt-divider--dashed { 
+    background: none; 
+    border-top: 1.5px dashed #d0d0d0; 
+}
+.receipt-body { 
+    width: 100%; 
+    max-width: 500px; 
+    display: flex; 
+    flex-direction: column; 
+    gap: 4px; 
+}
+.receipt-row { 
+    display: flex; 
+    justify-content: space-between; 
+    align-items: baseline; 
+    padding: 2px 0; 
+}
+.receipt-key { 
+    color: #999; 
+    font-weight: 600; 
+    text-transform: uppercase; 
+    letter-spacing: 0.06em; 
+    font-size: 11px; 
+}
+.receipt-val { 
+    color: #111; 
+    font-weight: 600; 
+    font-size: 13px; 
+    text-align: right; 
+}
+.receipt-row--highlight .receipt-key { 
+    color: #2e77f9; 
+}
+.receipt-row--highlight .receipt-val { 
+    color: #f64fd6; 
+    font-size: 15px; 
+}
+
+.split-hero { 
+    flex: 0 0 50%; 
+    position: relative; 
+    display: flex; 
+    overflow: hidden; 
+}
+.split-panel { 
+    position: relative; 
+    width: 50%; 
+    height: 100%; 
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+    cursor: pointer; 
+    transition: background 0.3s ease; 
+}
+.split-left  { background: #ffffff; z-index: 1; }
+.split-right { background: #ffffff; z-index: 1; }
+.split-left:hover  { background: #111111; }
+.split-right:hover { background: #111111; }
+
+.split-content { 
+    display: flex; 
+    flex-direction: column; 
+    align-items: center; 
+    gap: 2px; 
+    pointer-events: none; 
+    user-select: none; 
+    position: relative; 
+    z-index: 2; 
+}
+.split-left  .split-content { transform: translateX(-20px); }
+.split-right .split-content { transform: translateX(20px); }
+.split-label { 
+    font-family: 'Montserrat', Arial, sans-serif; 
+    font-size: clamp(2rem, 4.5vw, 4rem); 
+    font-weight: 600; 
+    letter-spacing: -0.02em; 
+    color: #111111; 
+    line-height: 1.05; 
+    transition: color 0.3s ease; 
+    text-transform: uppercase; 
+}
+.split-left:hover  .split-label,
+.split-right:hover .split-label { 
+    color: #ffffff; 
+}
+
+.split-divider {
+    position: absolute;
+    top: -10%;
+    left: calc(50% - 30px);
+    width: 60px;
+    height: 120%;
+    background: linear-gradient(to bottom, #f64fd6, #2e77f9);
+    transform: skewX(-6deg);
+    z-index: 5;
+    pointer-events: none;
+    box-shadow: 0 0 18px rgba(246,79,214,0.6);
+}
+.split-btn-invisible { 
+    position: absolute; 
+    inset: 0; 
+    width: 100%; 
+    height: 100%; 
+    background: transparent; 
+    border: none; 
+    cursor: pointer; 
+    z-index: 3; 
+}
+.split-left.confirmed-state              { background: #f64fd6 !important; }
+.split-left.confirmed-state .split-label { color: #fff !important; }
+
+.confirm-modal { 
+    display: none; 
+    position: fixed; 
+    top: 0; 
+    left: 0; 
+    width: 100%; 
+    height: 100%; 
+    background: rgba(0,0,0,0.5); 
+    z-index: 999; 
+    justify-content: center; 
+    align-items: center; 
+}
+.confirm-box { 
+    padding: 30px 35px 25px; 
+    border-radius: 12px; 
+    text-align: center; 
+    font-family: 'Montserrat', Arial, sans-serif; 
+    font-size: 18px; 
+    font-weight: 600; 
+    position: relative;
+    
+    border: 3px solid transparent;
+    background-image: linear-gradient(#fff, #fff), linear-gradient(to bottom right, #f64fd6, #2e77f9);
+    background-origin: border-box;
+    background-clip: padding-box, border-box;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+}
+.modal-btn-row {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    margin-top: 15px;
+}
+.confirm-box button { 
+    padding: 8px 16px; 
+    border: none; 
+    border-radius: 6px; 
+    background: #2e77f9; 
+    color: white; 
+    cursor: pointer; 
+    font-family: 'Montserrat', Arial, sans-serif;
+    font-weight: 600;
+    transition: background 0.2s;
+}
+.confirm-box button:hover { 
+    background: #1d5fd1; 
+}
+#downloadReceiptBtn {
+    background: #f64fd6;
+}
+#downloadReceiptBtn:hover {
+    background: #d43ab8;
+}
